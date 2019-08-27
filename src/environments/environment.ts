@@ -3,7 +3,13 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+    baseUrl: 'http://hdixbpmemid01.hdi.br:5555/',
+    baseApiUrl: 'http://hdixbpmemid01.hdi.br:5555/rest/Dashboard/',
+    host: "HDIXBPMEMID01",
+    realmName: "nsp://HDIXBPMEMID01.HDI.BR:9000",
+    queueEmissaoLabel: "dynamicQueues/EmissaoDigitalFilaJMS",
+    queueEmissaoMax: 0
 };
 
 /*
