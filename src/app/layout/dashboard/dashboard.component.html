@@ -1,5 +1,5 @@
 <div [@routerTransition]>
-    <h2 class="text-muted">Universal Message => <small>{{ host }}</small></h2>
+    <h2 class="text-muted">Universal Message => <small>HOST: {{ host }}</small></h2>
     <!--
     <div class="row">
         <div class="col-md-12">
@@ -37,16 +37,39 @@
      -->
 
     <div class="row">
-        <div class="col-xl-6 col-lg-12 fa-align-left">
-            <app-stat [bgClass]="queueEmissaoClass" [label]="queueEmissaoLabel" [count]="queueEmissaoCount"></app-stat>
+        <div class="col-xl-3" >
+            <app-stat ngbTooltip="queueHDIFilaJMS.dashboard.label" [bgClass]="queueHDIFilaJMS.dashboard.class" [icon]="queueHDIFilaJMS.dashboard.icon" [label]="queueHDIFilaJMS.dashboard.label" [count]="queueHDIFilaJMS.dashboard.value"></app-stat>
         </div>
-        <div class="col-xl-6 col-lg-12 fa-align-left">
-            <app-stat [bgClass]="queueEmissaoClass" [label]="queueEmissaoLabel" [count]="queueEmissaoCount"></app-stat>
+        <div class="col-xl-3">
+            <app-stat [bgClass]="queueEmissaoDigital.dashboard.class" [icon]="queueEmissaoDigital.dashboard.icon" [label]="queueEmissaoDigital.dashboard.label" [count]="queueEmissaoDigital.dashboard.value"></app-stat>
+        </div>
+        <div class="col-xl-3">
+            <app-stat [bgClass]="queueEmissaoDigitalProcesso.dashboard.class" [icon]="queueEmissaoDigitalProcesso.dashboard.icon" [label]="queueEmissaoDigitalProcesso.dashboard.label" [count]="queueEmissaoDigitalProcesso.dashboard.value"></app-stat>
+        </div>
+        <div class="col-xl-3">
+            <app-stat [bgClass]="queueApoliceDigital.dashboard.class" [icon]="queueApoliceDigital.dashboard.icon" [label]="queueApoliceDigital.dashboard.label" [count]="queueApoliceDigital.dashboard.value"></app-stat>
         </div>
     </div>
     <hr />
-    <ngb-alert [type]="alert.type" (close)="closeAlert(alert)" *ngFor="let alert of alerts">{{ alert.message }}</ngb-alert>
+    <div class="row">
+        <div class="col-xl-3">
+            <app-stat [bgClass]="queueVistoriaAuto.dashboard.class" [icon]="queueVistoriaAuto.dashboard.icon" [label]="queueVistoriaAuto.dashboard.label" [count]="queueVistoriaAuto.dashboard.value"></app-stat>
+        </div>
+        <div class="col-xl-3">
+            <app-stat [bgClass]="queueVistoriaAutoLaudo.dashboard.class" [icon]="queueVistoriaAutoLaudo.dashboard.icon" [label]="queueVistoriaAutoLaudo.dashboard.label" [count]="queueVistoriaAutoLaudo.dashboard.value"></app-stat>
+        </div>
+        <div class="col-xl-3">
+            <app-stat [bgClass]="queueVistoriaPresencial.dashboard.class" [icon]="queueVistoriaPresencial.dashboard.icon" [label]="queueVistoriaPresencial.dashboard.label" [count]="queueVistoriaPresencial.dashboard.value"></app-stat>
+        </div>
+        <div class="col-xl-3">
+            <app-stat [bgClass]="queueVistoriaResidencial.dashboard.class" [icon]="queueVistoriaResidencial.dashboard.icon" [label]="queueVistoriaResidencial.dashboard.label" [count]="queueVistoriaResidencial.dashboard.value"></app-stat>
+        </div>
+    </div>
+
+
     <hr />
+  <!--  <ngb-alert [type]="alert.type" (close)="closeAlert(alert)" *ngFor="let alert of alerts">{{ alert.message }}</ngb-alert>
+    <hr />-->
 
     <!--<div class="row">
         <div class="col-lg-8">

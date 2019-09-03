@@ -3,6 +3,20 @@ import {routerTransition} from '../../router.animations';
 import {QueueService} from "../../queue/services/queue.service";
 import { environment as env } from '../../../environments/environment';
 
+import { Observable, interval, Subscription } from 'rxjs';
+
+type DashboardType  = {
+    label: string,
+    attribute: string,
+    value: string,
+    class: string,
+    icon: string
+}
+
+type QueueType  = {
+    dashboard: DashboardType
+}
+
 @Component({
     selector: 'app-dashboard',
     templateUrl: './dashboard.component.html',
@@ -12,12 +26,22 @@ import { environment as env } from '../../../environments/environment';
 export class DashboardComponent implements OnInit {
     public alerts: Array<any> = [];
     public sliders: Array<any> = [];
+
+    private updateSubscription: Subscription;
+
     public host: string;
     public realmName: string;
-    public queueEmissaoLabel: string;
-    public queueEmissaoMax: number;
-    public queueEmissaoCount: number;
-    public queueEmissaoClass: string;
+    public queueMax: number;
+
+    public queueHDIFilaJMS: QueueType = { dashboard: { label: "", attribute: "", value: "", class: "", icon: "" } };
+    public queueEmissaoDigital: QueueType = { dashboard: { label: "", attribute: "", value: "", class: "", icon: "" } };
+    public queueEmissaoDigitalProcesso: QueueType = { dashboard: { label: "", attribute: "", value: "", class: "", icon: "" } };
+    public queueApoliceDigital: QueueType = { dashboard: { label: "", attribute: "", value: "", class: "", icon: "" } };
+    public queueVistoriaAuto: QueueType = { dashboard: { label: "", attribute: "", value: "", class: "", icon: "" } };
+    public queueVistoriaAutoLaudo: QueueType = { dashboard: { label: "", attribute: "", value: "", class: "", icon: "" } };
+    public queueVistoriaPresencial: QueueType = { dashboard: { label: "", attribute: "", value: "", class: "", icon: "" } };
+    public queueVistoriaResidencial: QueueType = { dashboard: { label: "", attribute: "", value: "", class: "", icon: "" } };
+    public queueCTDemanda: QueueType = { dashboard: { label: "", attribute: "", value: "", class: "", icon: "" } };
 
     constructor(private queueService : QueueService) {
         this.sliders.push(
@@ -63,38 +87,59 @@ export class DashboardComponent implements OnInit {
     ngOnInit() {
         this.host = env.host;
         this.realmName = env.realmName;
-        this.queueEmissaoLabel = env.queueEmissaoLabel;
-        this.queueEmissaoMax = +env.queueEmissaoMax;
-        this.carregarEmissaoDigitalDashboard();
+        this.queueMax = +env.queueMax;
+
+        this.updateSubscription = interval(env.reloadInMilliseconds).subscribe(
+            (val) => {
+                this.updateStats()
+            });
+
+        this.getDashboardQueue();
+    }
+
+    ngOnDestroy() {
+        this.updateSubscription.unsubscribe();
+    }
+
+    private updateStats() {
+        console.log('Reloading every ' + env.reloadInMilliseconds + ' milliseconds...');
+        this.getDashboardQueue();
+    }
+
+    getDashboardQueue() {
+        this.queueHDIFilaJMS.dashboard = this.getDashboardTypeByQueueAttributes( this.queueHDIFilaJMS.dashboard, env.queueHDIFilaJMS, env.queueAttributeSize );
+        this.queueEmissaoDigital.dashboard = this.getDashboardTypeByQueueAttributes( this.queueEmissaoDigital.dashboard, env.queueEmissaoDigital, env.queueAttributeSize );
+        this.queueEmissaoDigitalProcesso.dashboard = this.getDashboardTypeByQueueAttributes( this.queueEmissaoDigitalProcesso.dashboard, env.queueEmissaoDigitalProcesso, env.queueAttributeSize );
+        this.queueApoliceDigital.dashboard = this.getDashboardTypeByQueueAttributes( this.queueApoliceDigital.dashboard, env.queueApoliceDigital, env.queueAttributeSize );
+        this.queueVistoriaAuto.dashboard = this.getDashboardTypeByQueueAttributes( this.queueVistoriaAuto.dashboard, env.queueVistoriaAuto, env.queueAttributeSize );
+        this.queueVistoriaAutoLaudo.dashboard = this.getDashboardTypeByQueueAttributes ( this.queueVistoriaAutoLaudo.dashboard , env.queueVistoriaAutoLaudo , env.queueAttributeSize );
+        this.queueVistoriaPresencial.dashboard = this.getDashboardTypeByQueueAttributes ( this.queueVistoriaPresencial.dashboard , env.queueVistoriaPresencial , env.queueAttributeSize );
+        this.queueVistoriaResidencial.dashboard = this.getDashboardTypeByQueueAttributes ( this.queueVistoriaResidencial.dashboard , env.queueVistoriaResidencial , env.queueAttributeSize );
+        this.queueCTDemanda.dashboard = this.getDashboardTypeByQueueAttributes ( this.queueCTDemanda.dashboard , env.queueCTDemanda , env.queueAttributeSize );
     }
 
     //json-server --watch backend/queueAttribute.json
-    carregarEmissaoDigitalDashboard() {
-        this.queueService.getQueueAttribute().subscribe(data => {
+    getDashboardTypeByQueueAttributes(dashboard: DashboardType, queueName: string, attribute: string) : DashboardType {
+        //let dashboard: DashboardType  = { label: "", attribute: "", value: "", class: "", icon: "" };
+        dashboard.label = queueName;
+        dashboard.attribute = attribute;
+        this.queueService.getQueueAttribute(this.realmName, queueName, attribute).subscribe(data => {
             const {value} = data;
-            console.log("getQueueEmissaoCount.value= " + value);
-            this.queueEmissaoCount = +value;
-            this.queueEmissaoClass = this.obterClass(this.queueEmissaoCount, this.queueEmissaoMax);
+            console.log("getQueueAttribute.value= " + value + " - " + attribute + " - " + queueName);
+            dashboard.value = value;
+            let count: number = +value;
+            if (count == 0) {
+                dashboard.class = "success";
+                dashboard.icon = env.iconSuccess;
+            } else if (count > this.queueMax) {
+                dashboard.class = "danger";
+                dashboard.icon = env.iconDanger;
+            } else if (count <= this.queueMax) {
+                dashboard.class = "warning";
+                dashboard.icon = env.iconWarning;
+            }
         });
-        return this.queueEmissaoCount;
-    }
-
-    obterClass(count: number, maxPermitido: number) : string {
-        console.log("obterClass.count= " + count);
-        console.log("obterClass.maxPermitido= " + maxPermitido);
-        console.log(count == 0);
-        console.log(count > maxPermitido);
-        console.log(count < maxPermitido);
-        if (count == 0) {
-            console.log("obterClass.success");
-            return "success";
-        } else if (count > maxPermitido) {
-            console.log("obterClass.danger");
-            return "danger"
-        } else if (count < maxPermitido) {
-            console.log("obterClass.warning");
-            return "warning";
-        }
+        return dashboard;
     }
 
     public closeAlert(alert: any) {

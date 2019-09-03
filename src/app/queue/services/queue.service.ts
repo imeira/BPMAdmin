@@ -41,8 +41,9 @@ export class QueueService {
             return throwError(errorMessage);
         }
 
-        getQueueAttribute(): Observable<QueueAttribute> {
-                return this.http.get<QueueAttribute>(env.baseApiUrl + this.PATH )
+        getQueueAttribute(realmName: string, queueName: string, attribute: string): Observable<QueueAttribute> {
+                return this.http.get<QueueAttribute>(env.baseApiUrl + this.PATH
+                    + "?realmName=" + realmName + "&queueName=" + queueName + "&attribute=" + attribute)
                     .pipe(
                         retry(1),
                         catchError(this.errorHandl)

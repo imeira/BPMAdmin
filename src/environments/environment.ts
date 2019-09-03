@@ -6,10 +6,23 @@ export const environment = {
   production: false,
     baseUrl: 'http://hdixbpmemid01.hdi.br:5555/',
     baseApiUrl: 'http://hdixbpmemid01.hdi.br:5555/rest/Dashboard/',
-    host: "HDIXBPMEMID01",
-    realmName: "nsp://HDIXBPMEMID01.HDI.BR:9000",
-    queueEmissaoLabel: "dynamicQueues/EmissaoDigitalFilaJMS",
-    queueEmissaoMax: 0
+    host: "HDIXBPMEMIH01",
+    realmName: "nsp://HDIXBPMEMIH01.HDI.BR:9000",
+    reloadInMilliseconds: 60000,
+    queueAttributeSize: "size",
+    iconWarning: "fa-cogs",
+    iconDanger: "fa-exclamation-triangle",
+    iconSuccess: "fa-check-square-o",
+    queueMax: 10,
+    queueHDIFilaJMS: "dynamicQueues/HDIFilaJMS",
+    queueEmissaoDigital: "dynamicQueues/EmissaoDigitalFilaJMS",
+    queueEmissaoDigitalProcesso: "EmissaoDigitalProcesso_EmissaoDigitalHDI_SUBQUEUE",
+    queueApoliceDigital: "dynamicQueues/ApoliceDigitalFilaJMS",
+    queueVistoriaAuto: "GerirVistoriaAuto_GerirVistoriaAuto_SUBQUEUE",
+    queueVistoriaAutoLaudo: "GerirVistoriaAuto_AvaliarLaudo_SUBQUEUE",
+    queueVistoriaPresencial: "EmissaoVistoriaPresencial_GerirVistoriaPresencial_SUBQUEUE",
+    queueVistoriaResidencial: "EmissaVistoriaResidencial_Processo_GerirVistoriaResidencial_SUBQUEUE",
+    queueCTDemanda: "ComplianceCTDemanda_Processo_ControleDemandas_SUBQUEUE"
 };
 
 /*
