@@ -1,5 +1,5 @@
 {
-    "Dashboard": "Dashboard",
+    "Dashboard": "SAG - Filas",
     "Charts": "Charts",
     "Tables": "Tables",
     "Forms": "Forms",
@@ -30,7 +30,7 @@
     "Mail" : "Mail",
     "View All" : "View All",
     "More Themes" : "More Themes",
-    "Collapse Sidebar" : "Collapse Sidebar",
+    "Collapse Sidebar" : "Ocultar Menu",
     "Full Name": "Full Name",
     "Email": "Email",
     "Password": "Password",
