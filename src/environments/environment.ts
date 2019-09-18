@@ -8,7 +8,7 @@ export const environment = {
     baseApiUrl: 'http://hdixbpmemid01.hdi.br:5555/rest/Dashboard/',
     host: "HDIXBPMEMID01",
     realmName: "nsp://HDIXBPMEMID01.HDI.BR:9000",
-    reloadInMilliseconds: 120000,
+    reloadInMilliseconds: 20000,
     queueAttributeSize: "size",
     iconWarning: "fa-cogs",
     iconDanger: "fa-exclamation-triangle",
